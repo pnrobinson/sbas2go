@@ -28,7 +28,7 @@ For this analysis, we only need the following three files:
 * fromGTF.tar.gz 
 
 Unpack all three files in the same directory. This app expects to be passed
-the path to that directory as ``-d,--data``.
+the path to that directory as ``-s,--sbas``.
 
 ### Download the GO files
 Run the download command to download the necessary Gene Ontology files.
