@@ -1,6 +1,7 @@
 package org.jax.sbas2go.parsers;
 
 import org.jax.sbas2go.except.SbasRuntimeException;
+import org.monarchinitiative.phenol.analysis.AssociationContainer;
 import org.monarchinitiative.phenol.annotations.formats.go.GoGaf21Annotation;
 import org.monarchinitiative.phenol.annotations.obo.go.GoGeneAnnotationParser;
 import org.monarchinitiative.phenol.io.OntologyLoader;
@@ -16,6 +17,8 @@ public class GoParser {
     private final Ontology ontology;
 
     private final List<GoGaf21Annotation> goAnnotations;
+
+    private final AssociationContainer associationContainer;
 
     /**
      *
@@ -40,6 +43,7 @@ public class GoParser {
         }
         this.goAnnotations = GoGeneAnnotationParser.loadAnnotations(gafFile);
         System.out.printf("[INFO] Parsed goa_human.gaf and extracted %d annotations.\n", this.goAnnotations.size());
+        associationContainer = AssociationContainer.loadGoGafAssociationContainer(gafFile);
     }
 
     public Ontology getOntology() {
@@ -48,5 +52,9 @@ public class GoParser {
 
     public List<GoGaf21Annotation> getGoAnnotations() {
         return goAnnotations;
+    }
+
+    public AssociationContainer getAssociationContainer() {
+        return associationContainer;
     }
 }

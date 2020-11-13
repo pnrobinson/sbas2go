@@ -25,3 +25,4 @@ hs_err_pid*
 /data/go.obo
 /data/goa_human.gaf
 /data/goa_human.gaf.gz
+/data/non_alt_loci_set.txt
