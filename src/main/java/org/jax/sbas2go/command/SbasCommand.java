@@ -15,7 +15,7 @@ public class SbasCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        GoParser goParser = new GoParser("data");
+        //GoParser goParser = new GoParser("data");
         SbasParser sbasParser = new SbasParser(sbasdir);
 
 

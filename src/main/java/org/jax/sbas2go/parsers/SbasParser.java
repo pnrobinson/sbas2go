@@ -11,19 +11,26 @@ import java.util.Map;
 
 public class SbasParser {
 
-    private final Map<SpliceType, Map<Integer, FromGtf>> gtfMap;
+    //private final Map<SpliceType, Map<Integer, FromGtf>> gtfMap;
 
     public SbasParser(String dir) {
         File directory = new File(dir);
         if (! directory.exists() && directory.isDirectory()) {
             throw new SbasRuntimeException("Invalid sbas data directory");
         }
-        Path fromGtfPath = Paths.get(directory.getAbsolutePath(), "fromGTF");
+       /* Path fromGtfPath = Paths.get(directory.getAbsolutePath(), "fromGTF");
         File fromGtfFile = fromGtfPath.toFile();
         if (! fromGtfFile.exists() && fromGtfFile.isDirectory()) {
             throw new SbasRuntimeException("Could not find fromGTF directory");
         }
         FromGtfParser fromGtfParser = new FromGtfParser(fromGtfFile);
         this.gtfMap = fromGtfParser.getGtfMap();
+        */
+        Path dgePath = Paths.get(directory.getAbsolutePath(), "dge");
+        File dgeFile = dgePath.toFile();
+        if (! dgeFile.exists() && dgeFile.isDirectory()) {
+            throw new SbasRuntimeException("Could not find dge directory");
+        }
+        SbasDgeParser dgeParser = new SbasDgeParser(dgeFile);
     }
 }
