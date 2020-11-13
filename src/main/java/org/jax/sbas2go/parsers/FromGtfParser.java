@@ -49,7 +49,7 @@ public class FromGtfParser {
             String line = br.readLine(); // header
             Map<Integer, String> columns = columnNames(line);
             while((line = br.readLine()) != null) {
-                System.out.println(line);
+                //System.out.println(line);
                 String [] fields = line.split("\t");
                 if (fields.length != columns.size()) {
                     // should never happen

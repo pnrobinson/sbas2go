@@ -1,7 +1,6 @@
 package org.jax.sbas2go.command;
 
-import org.jax.sbas2go.parsers.GoParser;
-import org.jax.sbas2go.parsers.SbasParser;
+import org.jax.sbas2go.parsers.HgncParser;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -16,7 +15,8 @@ public class SbasCommand implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         //GoParser goParser = new GoParser("data");
-        SbasParser sbasParser = new SbasParser(sbasdir);
+        //SbasParser sbasParser = new SbasParser(sbasdir);
+        HgncParser hgncParser = new HgncParser();
 
 
         return 0;

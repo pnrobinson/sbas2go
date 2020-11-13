@@ -2,10 +2,7 @@ package org.jax.sbas2go.io;
 
 import org.jax.sbas2go.except.SbasRuntimeException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -24,14 +21,12 @@ public class SbasDownloader {
     /** If true, download new version whether or not the file is already present. */
     private final boolean overwrite;
 
-    private final static String PROSITE_DAT = "prosite.dat";
+    private final static String HGNC_File = "non_alt_loci_set.txt";
 
-    private final static String PROSITE_DAT_URL ="ftp://ftp.expasy.org/databases/prosite/prosite.dat";
+    private final static String HGNC_URL ="ftp://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/tsv/non_alt_loci_set.txt";
 
-    private final static String ENSEMBL_CDNA_URL
-            ="ftp://ftp.ensembl.org/pub/release-101/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz";
-    /** Basename of the file with cDNA sequences for ensembl genes. */
-    private final static String ENSEMBL_CDNA ="Homo_sapiens.GRCh38.cdna.all.fa.gz";
+
+
 
     private final static String GO_OBO = "go.obo";
     private final static String GO_OBO_URL = "http://purl.obolibrary.org/obo/go.obo";
@@ -54,8 +49,7 @@ public class SbasDownloader {
      * Download the files unless they are already present.
      */
     public void download() {
-//        downloadFileIfNeeded(PROSITE_DAT, PROSITE_DAT_URL);
-//        downloadFileIfNeeded(ENSEMBL_CDNA,ENSEMBL_CDNA_URL);
+        downloadFileIfNeeded(HGNC_File,HGNC_URL);
         downloadGzipFileIfNeeded(GO_ANNOT,GO_ANNOT_GZ, GO_ANNOT_URL);
         downloadFileIfNeeded(GO_OBO,GO_OBO_URL);
 
