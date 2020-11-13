@@ -18,7 +18,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <junit.version>5.6.1</junit.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <phenol.version>1.6.1</phenol.version>
+        <phenol.version>1.6.2-SNAPSHOT</phenol.version>
     </properties>
 
 

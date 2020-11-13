@@ -63,7 +63,11 @@ public class SbasCommand implements Callable<Integer> {
             String tissue = entry.getKey();
             Set<Dge> dgeSet = entry.getValue();
             StudySet study = geneSetExtractor.getStudySet(dgeSet, tissue);
-            doDgeAnalysis(tissue, study, ontology, associationContainer, populationSet);
+            try {
+                doDgeAnalysis(tissue, study, ontology, associationContainer, populationSet);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         //associationContainer.
 
@@ -77,8 +81,9 @@ public class SbasCommand implements Callable<Integer> {
                                AssociationContainer associationContainer,
                                PopulationSet populationSet) {
         System.out.println();
-        System.out.println("[INFO] DGE: Term-for-term analysis");
+        System.out.printf("[INFO] DGE: Term-for-term analysis for %s\n", tissue);
         System.out.println();
+        System.out.printf("[INFO] study set: %d genes; population set: %d genes\n", study.getAnnotatedItemCount(), populationSet.getAnnotatedItemCount());
 
         MultipleTestingCorrection bonf = new Bonferroni();
         TermForTermPValueCalculation tftpvalcal = new TermForTermPValueCalculation(ontology,

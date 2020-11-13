@@ -1,5 +1,6 @@
 package org.jax.sbas2go.analysis;
 
+import org.jax.sbas2go.except.SbasRuntimeException;
 import org.monarchinitiative.phenol.analysis.AssociationContainer;
 import org.monarchinitiative.phenol.analysis.DirectAndIndirectTermAnnotations;
 import org.monarchinitiative.phenol.analysis.PopulationSet;
@@ -39,8 +40,14 @@ public class GeneSetExtractor {
         this.ontology = ontology;
         symbol2uniprotMap = new HashMap<>();
         for (var termAnnot : annots) {
-            TermId uniprotId = termAnnot.getTermId();
+            TermId uniprotId = termAnnot.getDbObjectTermId();
             String symbol = termAnnot.getDbObjectSymbol();
+            if (! uniprotId.getValue().startsWith("UniProtKB")) {
+                throw new SbasRuntimeException("Bad Uniprot id in mapping: " + uniprotId.getValue());
+            }
+            if (symbol == null || symbol.length()<1) {
+                throw new SbasRuntimeException("Bad symbol id \"" + symbol +"\"");
+            }
            symbol2uniprotMap.putIfAbsent(symbol, uniprotId);
         }
         System.out.printf("Extracted %d symbol to Uniprot TermId mappings.\n", symbol2termId.size());
@@ -87,6 +94,10 @@ public class GeneSetExtractor {
             if (symbolOpt.isPresent()) {
                 Optional<TermId> tidOpt = Optional.ofNullable(symbol2uniprotMap.get(symbolOpt.get()));
                 if (tidOpt.isPresent()) {
+                    TermId uniprot = tidOpt.get();
+                    if (! uniprot.getValue().startsWith("UniProtKB")) {
+                        throw new SbasRuntimeException("Got bad uniprot id for study set: \"" + uniprot.getValue() + "\"");
+                    }
                     tidSet.add(tidOpt.get());
                 } else {
                     notFound++;
@@ -96,6 +107,9 @@ public class GeneSetExtractor {
             }
         }
         System.out.printf("[INFO] Found %d TermIds, could not find %d\n", tidSet.size(), notFound);
+        if (tidSet.size() < 2) {
+            throw new SbasRuntimeException("Study set too small size =" + tidSet.size());
+        }
         Map<TermId, DirectAndIndirectTermAnnotations> studyAssociations = associationContainer.getAssociationMap(tidSet, ontology);
 
         return new StudySet(tidSet, name, studyAssociations);
