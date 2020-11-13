@@ -1,13 +1,10 @@
 package org.jax.sbas2go.parsers;
 
 import org.jax.sbas2go.except.SbasRuntimeException;
-import org.jax.sbas2go.gtf.FromGtf;
-import org.jax.sbas2go.gtf.SpliceType;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 
 public class SbasParser {
 
@@ -32,5 +29,11 @@ public class SbasParser {
             throw new SbasRuntimeException("Could not find dge directory");
         }
         SbasDgeParser dgeParser = new SbasDgeParser(dgeFile);
+        Path dasPath = Paths.get(directory.getAbsolutePath(), "as");
+        File dasFile = dasPath.toFile();
+        if (! dasFile.exists() && dasFile.isDirectory()) {
+            throw new SbasRuntimeException("Could not find dge directory");
+        }
+        SbasDasParser dasParser = new SbasDasParser(dasFile);
     }
 }
