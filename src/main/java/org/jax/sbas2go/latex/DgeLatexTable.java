@@ -53,7 +53,7 @@ public class DgeLatexTable {
     }
 
 
-    private Map<String, String> createTissueMap() {
+    public static Map<String, String> createTissueMap() {
         Map<String,String> tissuemap = new HashMap<>();
         tissuemap.put("nerve_tibial", "tibial nerve");
         tissuemap.put("cells_cultured_fibroblasts", "fibroblasts");

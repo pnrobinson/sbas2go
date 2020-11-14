@@ -43,11 +43,12 @@ public class SbasCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
+        SbasParser sbasParser = new SbasParser(sbasdir);
         GoParser goParser = new GoParser("data");
         AssociationContainer associationContainer = goParser.getAssociationContainer();
         Ontology ontology = goParser.getOntology();
         List<GoGaf21Annotation> annots =  goParser.getGoAnnotations();
-        SbasParser sbasParser = new SbasParser(sbasdir);
+       // SbasParser sbasParser = new SbasParser(sbasdir);
         // the following has ENSEMBL ids
         Set<String> dgePopulation = sbasParser.getEnsembleDgePopulation();
         Set<String> asGeneSymbols = sbasParser.getAllGeneSymbols();

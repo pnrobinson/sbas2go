@@ -25,6 +25,7 @@ public class LaTeXCommand implements Callable<Integer> {
         writer.printSummary();
         writer.outputLatexTable();
         writer.outputSupplement();
+        writer.outputDasTable();
         return 0;
     }
 }

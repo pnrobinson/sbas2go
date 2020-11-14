@@ -42,6 +42,11 @@ public class ResultWriter {
         table.outputTable();
     }
 
+    public void outputDasTable() {
+        DasLatexTable dasLatexTable = new DasLatexTable(this.prefix, resultRowList);
+        dasLatexTable.outputTable();
+    }
+
 
     public void printSummary() {
         String fname = String.format("%s-summary.txt", this.prefix);
