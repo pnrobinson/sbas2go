@@ -1,6 +1,8 @@
 package org.jax.sbas2go.go;
 
 import org.monarchinitiative.phenol.ontology.data.Ontology;
+import org.monarchinitiative.phenol.ontology.data.Term;
+import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.monarchinitiative.phenol.stats.GoTerm2PValAndCounts;
 
 import java.io.BufferedWriter;
@@ -21,7 +23,20 @@ public class GoResultPrinter {
     }
 
     private String getLine(String tissue, int study, int pop, GoTerm2PValAndCounts gt) {
-        return String.format("%s\t%d\t%d\t%s", tissue, study, pop, gt.toString());
+        int annotatedStudy = gt.getAnnotatedStudyGenes();
+        int annotatedPop = gt.getAnnotatedPopulationGenes();
+        TermId tid = gt.getItem();
+        Term term = ontology.getTermMap().get(tid);
+        String label = "n/a";
+        if (term != null) {
+            label = term.getName();
+        }
+        double adjP = gt.getAdjustedPValue();
+        double P = gt.getRawPValue();
+        return String.format("%s\t%s\t%s\t%d/%d(%.1f%%)\t%d/%d(%.1f%%)\t%f\t%f", tissue, tid.getValue(), label,
+                annotatedStudy, study, 100.0*annotatedStudy/study,
+                annotatedPop, pop, 100.0*annotatedPop/pop,
+                P, adjP);
     }
 
     public void output(String fname) {
