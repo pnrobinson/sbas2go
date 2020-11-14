@@ -84,6 +84,28 @@ public class GeneSetExtractor {
         return new PopulationSet(tidSet, populationAssociations);
     }
 
+    public StudySet getStudySet(List<Das> dasSet, String name) {
+        Set<TermId> tidSet = new HashSet<>();
+        int notFound = 0;
+        for (var das : dasSet) {
+            String symbol = das.getSymbol();
+            Optional<TermId> tidOpt = Optional.ofNullable(symbol2uniprotMap.get(symbol));
+            if (tidOpt.isPresent()) {
+                TermId uniprot = tidOpt.get();
+                if (! uniprot.getValue().startsWith("UniProtKB")) {
+                    throw new SbasRuntimeException("Got bad uniprot id for study set: \"" + uniprot.getValue() + "\"");
+                }
+                tidSet.add(tidOpt.get());
+            } else {
+                notFound++;
+            }
+        }
+        System.out.printf("[INFO] Found %d TermIds, could not find %d\n", tidSet.size(), notFound);
+        Map<TermId, DirectAndIndirectTermAnnotations> studyAssociations = associationContainer.getAssociationMap(tidSet, ontology);
+
+        return new StudySet(tidSet, name, studyAssociations);
+    }
+
 
     public StudySet getStudySet(Set<Dge> dgeSet, String name) {
         Set<TermId> tidSet = new HashSet<>();

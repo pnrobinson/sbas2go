@@ -3,6 +3,8 @@ package org.jax.sbas2go.command;
 import org.jax.sbas2go.analysis.Das;
 import org.jax.sbas2go.analysis.Dge;
 import org.jax.sbas2go.analysis.GeneSetExtractor;
+import org.jax.sbas2go.go.GoResultPrinter;
+import org.jax.sbas2go.go.GoResultSet;
 import org.jax.sbas2go.parsers.GoParser;
 import org.jax.sbas2go.parsers.HgncParser;
 import org.jax.sbas2go.parsers.SbasParser;
@@ -19,6 +21,7 @@ import org.monarchinitiative.phenol.stats.mtc.Bonferroni;
 import org.monarchinitiative.phenol.stats.mtc.MultipleTestingCorrection;
 import picocli.CommandLine;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,6 +36,10 @@ public class SbasCommand implements Callable<Integer> {
 
 
     private final double ALPHA = 0.05;
+
+    private List<GoResultSet> dgeResults;
+
+    private List<GoResultSet> dasResults;
 
     @Override
     public Integer call() throws Exception {
@@ -58,24 +65,52 @@ public class SbasCommand implements Callable<Integer> {
                 ontology);
         PopulationSet populationSet = geneSetExtractor.getPopulationSet(dgePopulation, asGeneSymbols);
         System.out.printf("[INFO] Got populaton set with %d  annotated genes.\n", populationSet.getAnnotatedItemCount());
+        this.dgeResults = new ArrayList<>();
+        this.dasResults = new ArrayList<>();
         // do DGE analysis
         for (var entry : dgeMap.entrySet()) {
             String tissue = entry.getKey();
             Set<Dge> dgeSet = entry.getValue();
             StudySet study = geneSetExtractor.getStudySet(dgeSet, tissue);
+            if (study.getAnnotatedItemCount() < 2) {
+                System.out.printf("[INFO] Skipping analysis for %s (DGE) because it contains only %d gene(s)",
+                        tissue, study.getAnnotatedItemCount());
+                continue;
+            }
             try {
-                doDgeAnalysis(tissue, study, ontology, associationContainer, populationSet);
+                GoResultSet result = doDgeAnalysis(tissue, study, ontology, associationContainer, populationSet);
+                dgeResults.add(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        //associationContainer.
+        // do DAS analysis
+        for (var entry : asMap.entrySet()) {
+            String tissue = entry.getKey();
+            List<Das> dasSet = entry.getValue();
+            StudySet study = geneSetExtractor.getStudySet(dasSet, tissue);
+            if (study.getAnnotatedItemCount() < 2) {
+                System.out.printf("[INFO] Skipping analysis for %s (DAS) because it contains only %d gene(s)",
+                        tissue, study.getAnnotatedItemCount());
+                continue;
+            }
+            try {
+                GoResultSet result = doDgeAnalysis(tissue, study, ontology, associationContainer, populationSet);
+                dasResults.add(result);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        GoResultPrinter printer = new GoResultPrinter(dgeResults, ontology);
+        printer.output("dge2go.tsv");
+        printer = new GoResultPrinter(dasResults, ontology);
+        printer.output("das2go.tsv");
 
         return 0;
     }
 
 
-    private void doDgeAnalysis(String tissue,
+    private GoResultSet doDgeAnalysis(String tissue,
                                StudySet study,
                                Ontology ontology,
                                AssociationContainer associationContainer,
@@ -96,29 +131,8 @@ public class SbasCommand implements Callable<Integer> {
         int n_sig = 0;
         int studysize = study.getAnnotatedItemCount();
         int popsize = populationSet.getAnnotatedItemCount();
-        System.out.println(String.format("[INFO] Study set: %d genes. Population set: %d genes",
-                studysize, popsize));
-        for (GoTerm2PValAndCounts item : pvals) {
-            double pval = item.getRawPValue();
-            double pval_adj = item.getAdjustedPValue();
-            TermId tid = item.getItem();
-            Term term = ontology.getTermMap().get(tid);
-            if (term == null) {
-                System.err.println("[ERROR] Could not retrieve term for " + tid.getValue());
-                continue;
-            }
-            String label = term.getName();
-            if (pval_adj > ALPHA) {
-                continue;
-            }
-            n_sig++;
-            double studypercentage = 100.0 * (double) item.getAnnotatedStudyGenes() / studysize;
-            double poppercentage = 100.0 * (double) item.getAnnotatedPopulationGenes() / popsize;
-            System.out.println(String.format("%s [%s]: %.2e (adjusted %.2e). Study: n=%d (%.1f%%); population: N=%d (%.1f%%)",
-                    label, tid.getValue(), pval, pval_adj, item.getAnnotatedStudyGenes(), studypercentage,
-                    item.getAnnotatedPopulationGenes(), poppercentage));
-        }
-        System.out.println(String.format("%d of %d terms were significant at alpha %.7f", n_sig, pvals.size(), ALPHA));
+        GoResultSet resultSet = new GoResultSet(tissue, studysize, popsize, pvals, ALPHA);
+        return resultSet;
     }
 
 
