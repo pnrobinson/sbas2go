@@ -11,6 +11,11 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * Parse the results of differential alternative splicing analysis. All results for any of the 5 types of AS are
+ * combined into a composite result for each tissue.
+ * @author Peter N Robinson
+ */
 public class SbasDasParser {
 
     private final Map<String, List<Das>> tissue2asMap;

@@ -26,3 +26,9 @@ hs_err_pid*
 /data/goa_human.gaf
 /data/goa_human.gaf.gz
 /data/non_alt_loci_set.txt
+/das2go.tsv
+/dge2go.tsv
+/sbas-summary.txt
+/sbas-dge.tex
+/sbas-go-analysis.csv
+/sbas-dge.*

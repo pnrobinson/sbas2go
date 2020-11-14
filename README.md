@@ -8,7 +8,8 @@ from the sbas2go project.
 
 ### Building the app
 
-Clone the application from GitHub and use maven to build the app.
+Clone the application from GitHub and use maven to build the app. (Note that currently we use a develop version
+of phenol 1.4.2-SNAPSHOT that needs to be installed locally).
 
 ```
 git clone https://github.com/pnrobinson/sbas2go.git
@@ -43,3 +44,8 @@ Following this, simply enter
 ```
 java -jar sbas.jar --data <path/to/sbas/directory>
 ```
+
+This outputs two files, ``das2go.tsv`` and ``dge2go.tsv`` with significant GO terms per tissue.
+
+## Output summary files
+Finally, the following command ingests ``das2go.tsv`` and ``dge2go.tsv`` and generates some output files.
