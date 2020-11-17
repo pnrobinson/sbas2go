@@ -66,14 +66,14 @@ public class GoResultPrinter {
     public void dumpStats(String message) {
         System.out.printf("[INFO] %s", message);
         Set<String> significantTissues = new HashSet<>();
-        Set<String> significantTerms = new HashSet<>();
+        Set<TermId> significantTerms = new HashSet<>();
         int sigCount = 0;
         for (GoResultSet grs : resultList) {
             for (var pv : grs.getPvals()) {
                 if (pv.getAdjustedPValue() < 0.05) {
                     sigCount++;
                     significantTissues.add(grs.getName());
-                    significantTerms.add(grs.getName());
+                    significantTerms.add(pv.getItem());
                 }
             }
         }
