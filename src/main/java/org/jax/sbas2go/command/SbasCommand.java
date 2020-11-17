@@ -47,8 +47,6 @@ public class SbasCommand implements Callable<Integer> {
         AssociationContainer associationContainer = goParser.getAssociationContainer();
         Ontology ontology = goParser.getOntology();
         List<GoGaf21Annotation> annots =  goParser.getGoAnnotations();
-       // SbasParser sbasParser = new SbasParser(sbasdir);
-        // the following has ENSEMBL ids
         Set<String> dgePopulation = sbasParser.getEnsembleDgePopulation();
         Set<String> asGeneSymbols = sbasParser.getAllGeneSymbols();
         Map<String, List<Das>> asMap = sbasParser.getTissue2asMap();
@@ -103,8 +101,10 @@ public class SbasCommand implements Callable<Integer> {
         }
         GoResultPrinter printer = new GoResultPrinter(dgeResults, ontology);
         printer.output("dge2go.tsv");
+        printer.dumpStats("DGE");
         printer = new GoResultPrinter(dasResults, ontology);
         printer.output("das2go.tsv");
+        printer.dumpStats("DAS");
 
         return 0;
     }

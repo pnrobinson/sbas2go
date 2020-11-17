@@ -8,7 +8,10 @@ import org.monarchinitiative.phenol.stats.GoTerm2PValAndCounts;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GoResultPrinter {
 
@@ -57,6 +60,26 @@ public class GoResultPrinter {
         } catch (IOException e ) {
             e.printStackTrace();
         }
+    }
+
+
+    public void dumpStats(String message) {
+        System.out.printf("[INFO] %s", message);
+        Set<String> significantTissues = new HashSet<>();
+        Set<String> significantTerms = new HashSet<>();
+        int sigCount = 0;
+        for (GoResultSet grs : resultList) {
+            for (var pv : grs.getPvals()) {
+                if (pv.getAdjustedPValue() < 0.05) {
+                    sigCount++;
+                    significantTissues.add(grs.getName());
+                    significantTerms.add(grs.getName());
+                }
+            }
+        }
+        System.out.printf("[INFO] number of significant p values: %d\n", sigCount);
+        System.out.printf("[INFO] number of tissues with significant p values: %d\n", significantTissues.size());
+        System.out.printf("[INFO] number of GO terms with p values: %d\n", significantTerms.size());
     }
 
 
