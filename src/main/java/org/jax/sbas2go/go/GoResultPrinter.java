@@ -12,7 +12,7 @@ import java.util.List;
 
 public class GoResultPrinter {
 
-    private double ALPHA = 0.05;
+    private final double ALPHA = 0.05;
     private final List<GoResultSet> resultList;
 
     private final Ontology ontology;

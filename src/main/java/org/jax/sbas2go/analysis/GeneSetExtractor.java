@@ -58,12 +58,11 @@ public class GeneSetExtractor {
      * We need to map to Uniprot IDs
      * @param dgePopulation List of ensembl ids for DGEs
      * @param asGeneSymbols List of symbols for DASs
-     * @return
+     * @return Population set for GO analysis
      */
     public PopulationSet getPopulationSet(Set<String> dgePopulation, Set<String> asGeneSymbols) {
         Set<TermId> tidSet = new HashSet<>();
-        Set<String> allSymbols = new HashSet<>();
-        allSymbols.addAll(asGeneSymbols);
+        Set<String> allSymbols = new HashSet<>(asGeneSymbols);
         for (var ens : dgePopulation) {
             Optional<String> symbolOpt = Optional.ofNullable(ensembl2symbolMap.get(ens));
             if (symbolOpt.isPresent()) {

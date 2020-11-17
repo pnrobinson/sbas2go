@@ -1,9 +1,7 @@
 package org.jax.sbas2go.latex;
 
 import org.jax.sbas2go.except.SbasRuntimeException;
-import org.monarchinitiative.phenol.ontology.data.TermId;
 
-import javax.sql.RowSetReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -149,7 +147,7 @@ public class DgeLatexTable {
                 .filter(result -> result.getTissue().equals(tissue))
                 .collect(Collectors.toList());
         for (var term : terms) {
-            if (tissueResults.stream().map(ResultRow::getLabel).filter(value -> value.equals(term)).findAny().isPresent()) {
+            if (tissueResults.stream().map(ResultRow::getLabel).anyMatch(value -> value.equals(term))) {
                 writer.write("& \\cellcolor{blue!25} \\ding{51} ");
             } else {
                 writer.write("& ");

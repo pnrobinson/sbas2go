@@ -13,7 +13,6 @@ import org.monarchinitiative.phenol.analysis.PopulationSet;
 import org.monarchinitiative.phenol.analysis.StudySet;
 import org.monarchinitiative.phenol.annotations.formats.go.GoGaf21Annotation;
 import org.monarchinitiative.phenol.ontology.data.Ontology;
-import org.monarchinitiative.phenol.ontology.data.Term;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.monarchinitiative.phenol.stats.GoTerm2PValAndCounts;
 import org.monarchinitiative.phenol.stats.TermForTermPValueCalculation;
@@ -132,8 +131,7 @@ public class SbasCommand implements Callable<Integer> {
         int n_sig = 0;
         int studysize = study.getAnnotatedItemCount();
         int popsize = populationSet.getAnnotatedItemCount();
-        GoResultSet resultSet = new GoResultSet(tissue, studysize, popsize, pvals, ALPHA);
-        return resultSet;
+        return new GoResultSet(tissue, studysize, popsize, pvals, ALPHA);
     }
 
 

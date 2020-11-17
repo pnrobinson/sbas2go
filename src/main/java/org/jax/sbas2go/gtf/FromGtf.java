@@ -1,6 +1,5 @@
 package org.jax.sbas2go.gtf;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class FromGtf {

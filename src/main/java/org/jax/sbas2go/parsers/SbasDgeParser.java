@@ -2,8 +2,6 @@ package org.jax.sbas2go.parsers;
 
 import org.jax.sbas2go.analysis.Dge;
 import org.jax.sbas2go.except.SbasRuntimeException;
-import org.jax.sbas2go.gtf.FromGtf;
-import org.jax.sbas2go.gtf.SpliceType;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -54,8 +52,8 @@ public class SbasDgeParser {
      * [4] P.Value
      * [5] adj.P.Val
      * [6] B
-     * @param dgeDir
-     * @param fnames
+     * @param dgeDir directory with differentially expressed genes
+     * @param fnames names of the individual DGE files
      */
     private void  getDifferentialGenes(File dgeDir, List<String> fnames) {
         for (String name : fnames) {

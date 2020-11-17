@@ -231,7 +231,7 @@ public class FileDownloader {
             if (pb != null && pos != pb.getMax())
                 pb.print(fileSize);
         } catch (IOException | IllegalStateException e) {
-            System.err.printf("Failed to downloaded file from %s",src.getHost(),e);
+            System.err.printf("Failed to downloaded file from %s.",src.getHost());
             throw new FileDownloadException("ERROR: Problem downloading file: " + e.getMessage());
         }
         return true;

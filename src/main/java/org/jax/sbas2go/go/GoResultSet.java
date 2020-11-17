@@ -30,8 +30,8 @@ public class GoResultSet {
 
     public void dump(Ontology ontology) {
         int n_sig = 0;
-        System.out.println(String.format("[INFO] Study set: %d genes. Population set: %d genes",
-                studysize, popsize));
+        System.out.printf("[INFO] Study set: %d genes. Population set: %d genes%n",
+                studysize, popsize);
         for (GoTerm2PValAndCounts item : pvals) {
             double pval = item.getRawPValue();
             double pval_adj = item.getAdjustedPValue();
@@ -48,10 +48,10 @@ public class GoResultSet {
             n_sig++;
             double studypercentage = 100.0 * (double) item.getAnnotatedStudyGenes() / studysize;
             double poppercentage = 100.0 * (double) item.getAnnotatedPopulationGenes() / popsize;
-            System.out.println(String.format("%s [%s]: %.2e (adjusted %.2e). Study: n=%d (%.1f%%); population: N=%d (%.1f%%)",
+            System.out.printf("%s [%s]: %.2e (adjusted %.2e). Study: n=%d (%.1f%%); population: N=%d (%.1f%%)%n",
                     label, tid.getValue(), pval, pval_adj, item.getAnnotatedStudyGenes(), studypercentage,
-                    item.getAnnotatedPopulationGenes(), poppercentage));
-            System.out.println(String.format("%d of %d terms were significant at alpha %.7f", n_sig, pvals.size(), ALPHA));
+                    item.getAnnotatedPopulationGenes(), poppercentage);
+            System.out.printf("%d of %d terms were significant at alpha %.7f%n", n_sig, pvals.size(), ALPHA);
         }
     }
 
