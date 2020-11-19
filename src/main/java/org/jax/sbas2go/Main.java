@@ -1,5 +1,6 @@
 package org.jax.sbas2go;
 
+import org.jax.sbas2go.command.BedCommand;
 import org.jax.sbas2go.command.DownloadCommand;
 import org.jax.sbas2go.command.LaTeXCommand;
 import org.jax.sbas2go.command.SbasCommand;
@@ -21,6 +22,7 @@ public class Main implements Callable<Integer> {
         CommandLine cline = new CommandLine(new Main())
                 .addSubcommand("download", new DownloadCommand())
                 .addSubcommand("go", new SbasCommand())
+                .addSubcommand("bed", new BedCommand())
                 .addSubcommand("latex", new LaTeXCommand());
         cline.setToggleBooleanFlags(false);
         int exitCode = cline.execute(args);

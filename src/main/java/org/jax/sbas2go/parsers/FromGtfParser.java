@@ -12,10 +12,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class FromGtfParser {
-
+    /**
+     * Key-one of the five RMATS splice types
+     * Value-a map whose key is the event number and the value is a {@link FromGtf} object.
+     */
     private final Map<SpliceType, Map<Integer, FromGtf>> gtfMap;
 
     /**

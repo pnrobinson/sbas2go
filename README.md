@@ -42,10 +42,18 @@ java -jar sbas2go download
 
 Following this, simply enter
 ```
-java -jar sbas.jar --data <path/to/sbas/directory>
+java -jar sbas.jar go -s  <path/to/sbas/directory>
 ```
 
 This outputs two files, ``das2go.tsv`` and ``dge2go.tsv`` with significant GO terms per tissue.
 
 ## Output summary files
 Finally, the following command ingests ``das2go.tsv`` and ``dge2go.tsv`` and generates some output files.
+
+
+## BED Files
+To outout BED files with significant and control DAS exons, enter
+```
+java -jar sbas.jar bed -s  <path/to/sbas/directory>
+```
+This command outputs ``das-significant.bed`` and ``das-control.bed``

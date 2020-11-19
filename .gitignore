@@ -33,3 +33,6 @@ hs_err_pid*
 /sbas-go-analysis.csv
 /sbas-dge.*
 /sbas-das.*
+/das-control.bed
+/das-significant.bed
+/target/

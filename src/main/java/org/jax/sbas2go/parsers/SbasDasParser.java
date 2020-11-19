@@ -17,13 +17,17 @@ import java.util.stream.Collectors;
  * @author Peter N Robinson
  */
 public class SbasDasParser {
-
+    /** key- a tissue; value- a list of {@link Das} objects. */
     private final Map<String, List<Das>> tissue2asMap;
     private final Set<String> allGeneSymbols;
     private int totalAlternativeSplicintEventCount = 0;
     private int significantEventCount = 0;
 
     public SbasDasParser(File dgeDir) {
+        this(dgeDir, true);
+    }
+
+    public SbasDasParser(File dgeDir, boolean skipNonSignificant) {
         String []files = dgeDir.list();
         Objects.requireNonNull(files);
         List<String> originalFiles = Arrays.stream(files)
@@ -36,15 +40,19 @@ public class SbasDasParser {
         List<String> mxe = originalFiles.stream().filter(value -> value.startsWith("mxe")).collect(Collectors.toList());
         tissue2asMap = new HashMap<>();
         allGeneSymbols = new HashSet<>();
-        parseFiles(dgeDir, a3ss);
-        parseFiles(dgeDir, a5ss);
-        parseFiles(dgeDir, ri);
-        parseFiles(dgeDir, se);
-        parseFiles(dgeDir, mxe);
+        parseFiles(dgeDir, a3ss, skipNonSignificant);
+        parseFiles(dgeDir, a5ss, skipNonSignificant);
+        parseFiles(dgeDir, ri, skipNonSignificant);
+        parseFiles(dgeDir, se, skipNonSignificant);
+        parseFiles(dgeDir, mxe, skipNonSignificant);
         System.out.printf("[INFO] Parsed %d tissues for the AS data.\n", tissue2asMap.size());
         System.out.printf("[INFO] Parsed %d gene symbols in the AS data.\n", allGeneSymbols.size());
         System.out.printf("[INFO] Parsed %d events, %d of which were significant.\n", totalAlternativeSplicintEventCount, significantEventCount);
     }
+
+
+
+
 
     /**
      *
@@ -60,11 +68,14 @@ public class SbasDasParser {
         return tissue.substring(0,i);
     }
 
-    private void parseFiles(File dgeDir, List<String> files) {
+
+
+    private void parseFiles(File dgeDir, List<String> files, boolean skipNonSig) {
         for (String file : files) {
-            parseAs(dgeDir, file);
+            parseAs(dgeDir, file, skipNonSig);
         }
     }
+
 
     /**
      * [0] genesymbol-id, e.g., SDF4-1937
@@ -78,8 +89,9 @@ public class SbasDasParser {
      * so we get the kind of
      * @param dasDir directory with AS data
      * @param name filename
+     * @param skipNonSignificant iff true, do not include non-significant AS events
      */
-    private void parseAs(File dasDir, String name) {
+    private void parseAs(File dasDir, String name, boolean skipNonSignificant) {
         Path p = Paths.get(dasDir.getAbsolutePath(), name);
         File f = p.toFile();
         SpliceType stype = SpliceType.fromDasFileName(name);
@@ -111,7 +123,7 @@ public class SbasDasParser {
                 double B = Double.parseDouble(fields[6]);
                 allGeneSymbols.add(symbol);
                 totalAlternativeSplicintEventCount++;
-                if (adjPval>0.05) {
+                if (adjPval>0.05 && skipNonSignificant) {
                     continue;
                 }
                 significantEventCount++;
