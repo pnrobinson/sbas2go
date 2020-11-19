@@ -1,6 +1,7 @@
 package org.jax.sbas2go.gtf;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class FromGtf {
     private final SpliceType spliceType;
@@ -67,5 +68,24 @@ public class FromGtf {
 
     public Map<String, Integer> getPositions() {
         return positions;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(spliceType, id, geneID, symbol, chr, strand, exonStart, exonEnd);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (! (obj instanceof FromGtf))
+            return false;
+        FromGtf that = (FromGtf) obj;
+        return this.spliceType == that.spliceType &&
+                this.id == that.id &&
+                this.geneID.equals(that.geneID) &&
+                this.symbol.equals(that.symbol) &&
+                this.strand.equals(that.strand) &&
+                this.exonStart == that.exonStart &&
+                this.exonEnd == that.exonEnd;
     }
 }
