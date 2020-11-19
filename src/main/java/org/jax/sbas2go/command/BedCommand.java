@@ -30,13 +30,18 @@ public class BedCommand implements Callable<Integer> {
         return 0;
     }
 
+    /**
+     * Note that we subtract 1 from the genomic start in tthe GTF file to correspond to BED format
+     * @param gtfset
+     * @param fname
+     */
     public void outputGtfSet(Set<FromGtf> gtfset, String fname) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fname))) {
             for (var gtf : gtfset) {
                 String name = String.format("%s-%d(%s)", gtf.getSpliceType(), gtf.getId(), gtf.getSymbol());
                 String line = String.format("%s\t%d\t%d\t%s\t0\t%s\n",
                         gtf.getChr(),
-                        gtf.getExonStart(),
+                        gtf.getExonStart() - 1,
                         gtf.getExonEnd(),
                         name,
                         gtf.getStrand());
